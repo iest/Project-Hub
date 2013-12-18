@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>[Project Name] Project Timeline</title>
+        <meta name="viewport" content="width=device-width" />
+        <link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+    </head>
+    <body>
+
+    <script type="text/x-handlebars">
+        <h1>[Project Name] Project Timeline</h1>
+        <div class="tl-node--new">
+            <button {{action 'addNode'}}>
+                <span>+</span>
+            </button>
+        </div>
+        <ol class="timeline">
+            {{#each model}}
+                {{x-node date=date content=content link=link}}
+            {{/each}}
+        </ol>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name='components/x-node'>
+        <li class="tl-node">
+            {{#if isEditing}}
+                <div class="tl-stamp">{{input value=date}}</div>
+                <div class="tl-content">{{textarea value=content placeholder='Kickoff Meeting'}}</div>
+                {{input value=link placeholder='url'}}
+                {{input value=link placeholder='View the notes'}}
+            {{else}}
+                <div class="tl-stamp">{{date}}</div>
+                <div class="tl-content">{{content}}</div>
+                <a href="#">{{link}}</a>
+            {{/if}}
+        </li>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name='components/node-editor'>
+        <li class="tl-node">
+            <div class="tl-stamp">{{input value=date}}</div>
+            <div class="tl-content">{{textarea value=content placeholder='Kickoff Meeting'}}</div>
+            {{input value=link placeholder='url'}}
+            {{input value=link placeholder='View the notes'}}
+        </li>
+    </script>
+
+
+    <script src="js/libs/jquery-1.10.2.js"></script>
+    <script src="js/libs/handlebars-1.1.2.js"></script>
+    <script src="js/libs/ember-1.2.0.js"></script>
+    <script src="js/app.js"></script>
+
+    </body>
+</html>
