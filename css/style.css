@@ -23,15 +23,16 @@ body {
   background: #fff;
   color: #222222;
   font: 120%/1.4 "HelveticaNeue", "Helvetica", "Arial", sans-serif;
-  padding: 1em;
+  padding: 1.5em;
   -webkit-text-size-adjust: 100%; }
   @media all and (min-width: 40em) {
     body {
       padding-left: 2em; } }
 
-a {
+a,
+.link {
   color: gray;
-  text-decoration: none; }
+  text-decoration: none;}
 
 a:hover, a:focus {
   color: #222222;
@@ -47,6 +48,72 @@ img, object, video {
 a img {
   border: 0;
   outline: 0; }
+
+input,
+textarea {
+  font: 100%/1.4 "HelveticaNeue", "Helvetica", "Arial", sans-serif;
+  font-weight: lighter;
+  width: 100%;
+  color: #555;
+  border: 1px solid #ddd;
+  padding: 0.25em;}
+  input:focus,
+  textarea:focus {
+    outline: 0;   
+    border-color: lime;
+}
+
+::-webkit-input-placeholder {
+   color: red;
+}
+:-moz-placeholder { /* Firefox 18- */
+   color: red;  
+}
+::-moz-placeholder {  /* Firefox 19+ */
+   color: red;  
+}
+:-ms-input-placeholder {  
+   color: red;  
+}
+
+.btn {
+  border: 3px solid #ddd;
+  background: white;
+  font: 120%/1.4 "HelveticaNeue", "Helvetica", "Arial", sans-serif;
+  color: #2ACC6C;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 70%;
+  border-radius: 2em;
+  padding: 0.25em 0.5em;
+  cursor: pointer;}
+  .btn:hover {
+    background-color: #ddd;
+  }
+  .btn:active {
+    background-color: #2ACC6C;
+    color: white;
+  }
+  .btn:focus {
+    outline: 0;
+    border-color: #2ACC6C;
+  }
+  .btn:disabled,
+  .btn:disabled:hover,
+  .btn:disabled:active,
+  .btn:disabled:focus {
+    background-color: white;
+    color: #ddd;
+    cursor: default;
+  }
+  .btn input {
+    width: inherit;
+}
+
+label {
+  font-size: 80%;
+  color: #888;
+}
 
 h1 {
   font-size: 2em;
@@ -88,15 +155,9 @@ h3 {
 .tl-node {
   padding-left: 1em;
   margin-bottom: 3em;
-  position: relative; }
-  .tl-node--edit {
-    display: none;
-    float: right;
+  position: relative;
   }
-  .tl-node:hover .tl-node-edit {
-    display: block;
-  }
-  .tl-node a {
+  .tl-node .link {
     display: block; }
   .tl-node:before {
     content: "";
@@ -107,34 +168,27 @@ h3 {
     height: 20px;
     border-radius: 20px;
     background: #fff;
-    border: 5px solid #dddddd; }
+    border: 5px solid #dddddd;}
+.tl-node--edit {
+  display: none;
+  float: right;}
+.tl-node:hover .tl-node-edit {
+  display: block;
+}
 
 .tl-node--new {
   border-left: 5px dashed #dddddd;
-  height: 5em;
-}
-.tl-node--new button {
-  cursor: pointer;
+  height: 5em;}
+.tl-node--new .btn {
   position: relative;
-  top: -0.8em;
-  left: -0.95em;
   display: block;
-  color: #ddd;
-  border-radius: 100%;
-  background-color: white;
-  border: 5px solid #dddddd;
-  text-align: center;
-  width: 1.5em;
-  height: 1.5em;
-  display: block;
+  bottom: 10px;
+  right: 22px;
+  font-size: 1em;
   padding: 0;
-  font: 1em/1 "HelveticaNeue", "Helvetica", "Arial", sans-serif;
-}
-.tl-node--new button:active {
-  border-color: #888;
-}
-.tl-node--new button:focus {
-  outline: none;
+  width: 2em;
+  height: 2em;
+  line-height: 0;
 }
 
 /* Timestamp */
@@ -143,3 +197,27 @@ h3 {
   color: gray; }
 
 /************End Timeline**************/
+
+.weak {
+  font-size: 1em;
+  color: #888;
+}
+
+.size30 {
+  width: 30%;
+}
+
+.size50 {
+  width: 50%;
+}
+
+.size70 {
+  width: 70%;
+}
+
+.pull-left {
+  float: left;
+}
+.pull-right {
+  float: right;
+}

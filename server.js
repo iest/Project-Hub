@@ -3,7 +3,7 @@ var app = express();
 
 app.engine('html', require('ejs').renderFile);
 app.set('views', __dirname + '/views');
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname));
 app.use(app.router);
 
 app.get('/', function(req, res) {

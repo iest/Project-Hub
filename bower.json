@@ -1,0 +1,20 @@
+{
+  "name": "Project-Hub",
+  "version": "0.0.0",
+  "homepage": "https://github.com/iest/Project-Hub",
+  "authors": [
+    "Iestyn Williams <iest@eysys.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ember-starter-kit": "~1.2.0",
+    "momentjs": "~2.4.0"
+  }
+}

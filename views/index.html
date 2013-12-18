@@ -9,48 +9,53 @@
     <body>
 
     <script type="text/x-handlebars">
-        <h1>[Project Name] Project Timeline</h1>
-        <div class="tl-node--new">
-            <button {{action 'addNode'}}>
-                <span>+</span>
-            </button>
-        </div>
+        <h1>WIP Project Timeline</h1>
+        {{#unless isNewNode}}
+            <div class="tl-node--new">
+                <button class="btn" {{action 'newNode'}}>
+                    +
+                </button>
+            </div>
+        {{/unless}}
         <ol class="timeline">
-            {{#each model}}
-                {{x-node date=date content=content link=link}}
+            {{#each nodes}}
+                {{#if isEditing}}
+                    <li class="tl-node">
+                        <div class="tl-stamp">
+                            {{input value=date placeholder='Date, e.g. Dec 18th 2013'}}
+                        </div>
+                        <div class="tl-content">
+                            {{textarea value=content placeholder="e.g. Project kickoff meeting"}}
+                        </div>
+
+                        <div class='link'>
+                            {{input class='size30 pull-left'value=linkUrl placeholder='URL'}}
+                            {{input class='size70 pull-left'value=linkText placeholder="What's at that URL?"}}
+                        </div>
+
+                        
+                        <div>
+                            <button class="btn" {{bindAttr disabled='isInvalid'}} {{action 'saveNode' this}}>Save</button>
+                            <button class="btn" {{action 'cancelNode' this}}>Cancel</button>
+                        </div>
+                    </li>
+                {{else}}
+                    <li class="tl-node">
+                        <div class="tl-stamp">{{date}}</div>
+                        <div class="tl-content">{{content}}</div>
+                        <a {{bindAttr href='linkUrl'}}>{{linkText}}</a>
+                    </li>
+                {{/if}}
             {{/each}}
         </ol>
     </script>
 
-    <script type="text/x-handlebars" data-template-name='components/x-node'>
-        <li class="tl-node">
-            {{#if isEditing}}
-                <div class="tl-stamp">{{input value=date}}</div>
-                <div class="tl-content">{{textarea value=content placeholder='Kickoff Meeting'}}</div>
-                {{input value=link placeholder='url'}}
-                {{input value=link placeholder='View the notes'}}
-            {{else}}
-                <div class="tl-stamp">{{date}}</div>
-                <div class="tl-content">{{content}}</div>
-                <a href="#">{{link}}</a>
-            {{/if}}
-        </li>
-    </script>
 
-    <script type="text/x-handlebars" data-template-name='components/node-editor'>
-        <li class="tl-node">
-            <div class="tl-stamp">{{input value=date}}</div>
-            <div class="tl-content">{{textarea value=content placeholder='Kickoff Meeting'}}</div>
-            {{input value=link placeholder='url'}}
-            {{input value=link placeholder='View the notes'}}
-        </li>
-    </script>
-
-
-    <script src="js/libs/jquery-1.10.2.js"></script>
-    <script src="js/libs/handlebars-1.1.2.js"></script>
-    <script src="js/libs/ember-1.2.0.js"></script>
-    <script src="js/app.js"></script>
+    <script src="bower_components/ember-starter-kit/js/libs/jquery-1.10.2.js"></script>
+    <script src="bower_components/ember-starter-kit/js/libs/handlebars-1.1.2.js"></script>
+    <script src="bower_components/ember-starter-kit/js/libs/ember-1.2.0.js"></script>
+    <script src="bower_components/momentjs/min/moment.min.js"></script>
+    <script src="app.js"></script>
 
     </body>
 </html>
