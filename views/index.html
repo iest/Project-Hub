@@ -9,14 +9,30 @@
     <body>
 
     <script type="text/x-handlebars">
+        {{outlet}}
+    </script>
+
+    <script type="text/x-handlebars", data-template-name='login'>
+        <form>
+            <fieldset>
+                <label>Password</label>
+                {{input value=password type='password'}}
+            </fieldset>
+            <button class="btn" {{action 'login' password}}>Login</button>
+        </form>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name='timeline'>
         <h1>WIP Project Timeline</h1>
-        {{#unless isNewNode}}
-            <div class="tl-node--new">
-                <button class="btn" {{action 'newNode'}}>
-                    +
-                </button>
-            </div>
-        {{/unless}}
+        {{#if isAdmin}}
+            {{#unless isNewNode}}
+                <div class="tl-node--new">
+                    <button class="btn" {{action 'newNode'}}>
+                        +
+                    </button>
+                </div>
+            {{/unless}}
+        {{/if}}
         <ol class="timeline">
             {{#each nodes}}
                 {{#if isEditing}}
@@ -50,7 +66,9 @@
                     </li>
                 {{else}}
                     <li class="tl-node">
-                    <button class="showHover link pull-right small" {{action 'editNode' this}}>Edit</button>
+                        {{#if controller.isAdmin}}
+                            <button class="showHover link pull-right small" {{action 'editNode' this}}>Edit</button>
+                        {{/if}}
                         <div class="tl-stamp">{{date}}</div>
                         <div class="tl-content">{{content}}</div>
                         <a {{bindAttr href='linkUrl'}}>{{linkText}}</a>

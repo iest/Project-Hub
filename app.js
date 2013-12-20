@@ -11,17 +11,64 @@ App.Node = Ember.Object.extend({
 });
 
 App.Router.map(function() {
-  // put your routes here
+  this.resource('login');
+  this.resource('timeline');
 });
 
 App.ApplicationRoute = Ember.Route.extend({
 
+  isAdmin: false,
+
+  isLoggedIn: false,
+
+  activate: function() {
+    if (this.get('isLoggedIn')) {
+      this.transitionTo('timeline');
+    } else {
+      this.transitionTo('login');
+    }
+  },
+
+  actions: {
+    checkLogin: function(pass) {
+      var _this = this;
+
+      $.post('/api/auth', {
+        password: pass
+      })
+        .then(function(res) {
+          _this.set('isLoggedIn', true);
+          _this.transitionTo('timeline');
+        }).fail(function(fail) {
+          console.log('Failed');
+        });
+    }
+  }
+
 });
 
-App.ApplicationController = Ember.Controller.extend({
+App.LoginController = Ember.Controller.extend({
+  password: '',
+
+  actions: {
+    login: function(password) {
+      this.send('checkLogin', password);
+    }
+  }
+});
+
+App.TimelineRoute = Ember.Route.extend({
+  setupController: function(controller) {
+    controller.set('isAdmin', this.get('isAdmin'));
+  }
+});
+
+App.TimelineController = Ember.Controller.extend({
+  isAdmin: null,
 
   nodes: [App.Node.create({
-    date: moment().format('MMM Do YYYY'),
+    date: moment()
+      .format('MMM Do YYYY'),
     content: 'Project kickoff meeting',
     linkUrl: '#',
     linkText: 'View the notes'
@@ -31,7 +78,8 @@ App.ApplicationController = Ember.Controller.extend({
 
   actions: {
     setToday: function(node) {
-      node.set('date', moment().format('MMM Do YYYY'));
+      node.set('date', moment()
+        .format('MMM Do YYYY'));
     },
     newNode: function() {
       var node = App.Node.create();
@@ -50,7 +98,8 @@ App.ApplicationController = Ember.Controller.extend({
     deleteNode: function(node) {
       if (confirm('Are you sure you want to delete this node?')) {
         this.set('isNewNode', false);
-        this.get('nodes').removeObject(node);
+        this.get('nodes')
+          .removeObject(node);
       }
     },
 
@@ -58,7 +107,8 @@ App.ApplicationController = Ember.Controller.extend({
 
       if (this.get('isNewNode')) {
         this.set('isNewNode', false);
-        this.get('nodes').removeObject(node);
+        this.get('nodes')
+          .removeObject(node);
       }
 
       node.set('isEditing', false);
