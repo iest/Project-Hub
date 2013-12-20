@@ -63,24 +63,24 @@ textarea {
     border-color: lime;
 }
 
-::-webkit-input-placeholder {
+/*::-webkit-input-placeholder {
    color: red;
 }
-:-moz-placeholder { /* Firefox 18- */
+:-moz-placeholder {
    color: red;  
 }
-::-moz-placeholder {  /* Firefox 19+ */
+::-moz-placeholder {
    color: red;  
 }
 :-ms-input-placeholder {  
    color: red;  
-}
+}*/
 
 .btn {
-  border: 3px solid #ddd;
+  border: 2px solid #ddd;
   background: white;
   font: 120%/1.4 "HelveticaNeue", "Helvetica", "Arial", sans-serif;
-  color: #2ACC6C;
+  color: #444;
   text-transform: uppercase;
   font-weight: bold;
   font-size: 70%;
@@ -169,6 +169,16 @@ h3 {
     border-radius: 20px;
     background: #fff;
     border: 5px solid #dddddd;}
+.tl-node .showHover {
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transition: all 250ms ease-in-out;
+  transition: all 250ms ease-in-out;
+  opacity: 0;}
+.tl-node:hover .showHover {
+  opacity: 1;}
+
 .tl-node--edit {
   display: none;
   float: right;}
@@ -201,6 +211,10 @@ h3 {
 .weak {
   font-size: 1em;
   color: #888;
+}
+
+.small {
+  font-size: 70%;
 }
 
 .size30 {

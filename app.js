@@ -20,7 +20,12 @@ App.ApplicationRoute = Ember.Route.extend({
 
 App.ApplicationController = Ember.Controller.extend({
 
-  nodes: [],
+  nodes: [App.Node.create({
+    date: moment().format('MMM Do YYYY'),
+    content: 'Project kickoff meeting',
+    linkUrl: '#',
+    linkText: 'View the notes'
+  })],
 
   isNewNode: false,
 
@@ -30,9 +35,7 @@ App.ApplicationController = Ember.Controller.extend({
       node.setProperties({
         'isEditing': true,
         date: moment()
-          .format('MMM Do YYYY'),
-        content: 'test',
-        linkText: 'test'
+          .format('MMM Do YYYY')
       });
       this.get('nodes')
         .insertAt(0, node);
@@ -41,6 +44,33 @@ App.ApplicationController = Ember.Controller.extend({
     saveNode: function(node) {
       node.set('isEditing', false);
       this.set('isNewNode', false);
+    },
+
+    deleteNode: function(node) {
+      if (confirm('Are you sure you want to delete this node?')) {
+        this.set('isNewNode', false);
+        this.get('nodes').removeObject(node);
+      }
+    },
+
+    cancelNode: function(node) {
+
+      if (this.get('isNewNode')) {
+        this.set('isNewNode', false);
+        this.get('nodes').removeObject(node);
+      }
+
+      node.set('isEditing', false);
+    },
+    editNode: function(node) {
+      node.set('isEditing', true);
     }
+  }
+});
+
+App.InstantFocusView = Ember.View.extend({
+  didInsertElement: function() {
+    this.$('textarea')
+      .focus();
   }
 });
