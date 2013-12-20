@@ -1,0 +1,221 @@
+*
+  -moz-box-sizing border-box
+  -webkit-box-sizing border-box
+  box-sizing border-box
+
+html
+body
+div
+object
+iframe
+fieldset
+  margin 0
+  padding 0
+  border 0
+
+ol
+ul
+  list-style none
+  margin 0
+  padding 0
+
+header
+footer
+nav
+section
+article
+hgroup
+figure
+  display block
+
+body
+  background #fff
+  color #222222
+  font 120%/1.4 "HelveticaNeue", "Helvetica", "Arial", sans-serif
+  padding 1.5em
+  -webkit-text-size-adjust 100%
+
+a
+.link
+  color gray
+  text-decoration none
+
+a:hover, a:focus
+  color #222222
+  text-decoration underline
+
+p
+  margin 0 0 1em
+
+img
+object
+video
+  max-width 100%
+  border 0
+
+a img
+  border 0
+  outline 0
+
+input,
+textarea
+  font 100%/1.4 "HelveticaNeue", "Helvetica", "Arial", sans-serif
+  font-weight lighter
+  width 100%
+  color #555
+  border 1px solid #ddd
+  padding 0.25em
+
+input:focus
+textarea:focus
+  outline 0
+  border-color lime
+
+::-webkit-input-placeholder
+  color red
+
+:-moz-placeholder
+  color red
+
+:-moz-placeholder
+  color red
+
+:-ms-input-placeholder
+  color red
+
+.btn
+  border 3px solid #ddd
+  background white
+  font 120%/1.4 "HelveticaNeue", "Helvetica", "Arial", sans-serif
+  color #2ACC6C
+  text-transform uppercase
+  font-weight bold
+  font-size 70%
+  border-radius 2em
+  padding 0.25em 0.5em
+  cursor pointer
+
+.btn:hover
+  background-color #ddd
+
+.btn:active
+  background-color #2ACC6C
+  color white
+
+.btn:focus
+  outline 0
+  border-color #2ACC6C
+
+.btn:disabled,
+  .btndisabled:hover,
+  .btndisabled:active,
+  .btndisabled:focus
+  background-color white
+  color #ddd
+  cursor default
+
+.btn input
+  width inherit
+
+label
+  font-size 80%
+  color #888
+
+h1
+  font-size 2em
+  line-height 1
+  letter-spacing -0.02em
+  margin-bottom 0.8em
+
+h2
+  text-transform lowercase
+  font-size 3em
+  line-height 1.1
+  margin 0 0 0.4em
+
+h3
+  font-size 1.8em
+  line-height 1.1
+  margin 0 0 0.2em
+  text-transform lowercase
+
+.timeline
+  border-left 5px solid #dddddd
+  padding-bottom 3em
+  position relative
+
+.timeline:before
+  content ""
+  position absolute
+  bottom 0
+  left -1.47em
+  width 40px
+  height 40px
+  border-radius 40px
+  background #dddddd
+  border 5px solid #dddddd
+
+.tl-node
+  padding-left 1em
+  margin-bottom 3em
+  position relative
+
+.tl-node .link
+  display block
+
+.tl-node:before
+  content ""
+  position absolute
+  top 0
+  left -0.95em
+  width 20px
+  height 20px
+  border-radius 20px
+  background #fff
+  border 5px solid #dddddd
+
+.tl-node--edit
+  display none
+  float right
+
+.tl-node:hover .tl-node-edit
+  display block
+
+.tl-node--new
+  border-left 5px dashed #dddddd
+  height 5em
+
+.tl-node--new .btn
+  position relative
+  display block
+  bottom 10px
+  right 22px
+  font-size 1em
+  padding 0
+  width 2em
+  height 2em
+  line-height 0
+
+.tl-stamp
+  font-size 0.7em
+  color gray
+
+.weak
+  font-size 1em
+  color #888
+
+.size30
+  width 30%
+
+.size50
+  width 50%
+
+.size70
+  width 70%
+
+.pull-left
+  float left
+
+.pull-right
+  float right
+

@@ -30,12 +30,13 @@ App.ApplicationController = Ember.Controller.extend({
   isNewNode: false,
 
   actions: {
+    setToday: function(node) {
+      node.set('date', moment().format('MMM Do YYYY'));
+    },
     newNode: function() {
       var node = App.Node.create();
       node.setProperties({
-        'isEditing': true,
-        date: moment()
-          .format('MMM Do YYYY')
+        'isEditing': true
       });
       this.get('nodes')
         .insertAt(0, node);

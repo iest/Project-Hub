@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>[Project Name] Project Timeline</title>
+        <title>WIP Project Timeline</title>
         <meta name="viewport" content="width=device-width" />
         <link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
     </head>
@@ -20,33 +20,37 @@
         <ol class="timeline">
             {{#each nodes}}
                 {{#if isEditing}}
-                    <li class="tl-node">
-                        <div class="tl-stamp">
-                            {{input value=date placeholder='Date, e.g. Dec 18th 2013'}}
-                        </div>
-                        <div class="tl-content">
-                            {{#view App.InstantFocusView}}
-                                {{textarea value=content placeholder="e.g. Project kickoff meeting"}}
-                            {{/view}}
-                        </div>
+                    <li class="tl-node tl-node--editing">
+                        <form>
+                            <fieldset>
+                                <label for='date'>Date</label>
+                                <button class="btn btn--today" {{action 'setToday' this}}>Today</button>
+                                {{input name='date' value=date placeholder='When did it happen?'}}
+                            </fieldset>
+                            <fieldset>
+                                <label>What happened?</label>
+                                {{#view App.InstantFocusView}}
+                                    {{textarea value=content placeholder="e.g. Project kickoff meeting"}}
+                                {{/view}}
+                            </fieldset>
+                            <fieldset>
+                                <label class="clear">Optional link</label>
+                                {{input class='size30 pull-left'value=linkUrl placeholder='URL'}}
+                                {{input class='size70 pull-right'value=linkText placeholder="What's at that URL?"}}
+                            </fieldset>
+                        </form>
 
-                        <div class='link'>
-                            {{input class='size30 pull-left'value=linkUrl placeholder='URL'}}
-                            {{input class='size70 pull-left'value=linkText placeholder="What's at that URL?"}}
-                        </div>
-
-                        
                         <div>
-                            <button class="btn" {{bindAttr disabled='isInvalid'}} {{action 'saveNode' this}}>Save</button>
+                            <button class="btn btn--success" {{bindAttr disabled='isInvalid'}} {{action 'saveNode' this}}>Save</button>
                             <button class="btn" {{action 'cancelNode' this}}>Cancel</button>
                             {{#unless controller.isNewNode}}
-                                <button class="btn pull-right" {{action 'deleteNode' this}}>Delete</button>
+                                <button class="btn btn--danger pull-right" {{action 'deleteNode' this}}>Delete</button>
                             {{/unless}}
                         </div>
                     </li>
                 {{else}}
                     <li class="tl-node">
-                    <button class="showHover btn pull-right small" {{action 'editNode' this}}>Edit</button>
+                    <button class="showHover link pull-right small" {{action 'editNode' this}}>Edit</button>
                         <div class="tl-stamp">{{date}}</div>
                         <div class="tl-content">{{content}}</div>
                         <a {{bindAttr href='linkUrl'}}>{{linkText}}</a>
