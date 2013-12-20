@@ -23,9 +23,13 @@ app.post('/api/auth', function(req, res) {
     var actual = data.toString();
 
     if (actual === pass) {
-      res.status(200).send();
+      res.status(200).type('json').send({
+        login: true
+      });
     } else {
-      res.status(401).send();
+      res.status(200).type('json').send({
+        login: false
+      });
     }
 
   });

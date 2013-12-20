@@ -37,10 +37,13 @@ App.ApplicationRoute = Ember.Route.extend({
         password: pass
       })
         .then(function(res) {
-          _this.set('isLoggedIn', true);
-          _this.transitionTo('timeline');
-        }).fail(function(fail) {
-          console.log('Failed');
+
+          if (res.login) {
+            _this.set('isLoggedIn', true);
+            _this.transitionTo('timeline');
+          } else {
+            console.log('Failed');
+          }
         });
     }
   }
