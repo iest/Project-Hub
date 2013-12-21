@@ -36,34 +36,34 @@
         <ol class="timeline">
             {{#each nodes}}
                 {{#if isEditing}}
-                    <li class="tl-node tl-node--editing">
-                        <form>
-                            <fieldset>
-                                <label for='date'>Date</label>
-                                <button class="btn btn--today" {{action 'setToday' this}}>Today</button>
-                                {{input name='date' value=date placeholder='When did it happen?'}}
-                            </fieldset>
-                            <fieldset>
-                                <label>What happened?</label>
-                                {{#view App.InstantFocusView}}
+                    {{#view App.NodeEditView}}
+                        <li class="tl-node tl-node--editing">
+                            <form>
+                                <fieldset>
+                                    <label for='date'>Date</label>
+                                    <button class="btn btn--today" {{action 'setToday' this}}>Today</button>
+                                    {{input name='date' value=date placeholder='When did it happen?'}}
+                                </fieldset>
+                                <fieldset>
+                                    <label>What happened?</label>
                                     {{textarea value=content placeholder="e.g. Project kickoff meeting"}}
-                                {{/view}}
-                            </fieldset>
-                            <fieldset>
-                                <label class="clear">Optional link</label>
-                                {{input class='size30 pull-left'value=linkUrl placeholder='URL'}}
-                                {{input class='size70 pull-right'value=linkText placeholder="What's at that URL?"}}
-                            </fieldset>
-                        </form>
+                                </fieldset>
+                                <fieldset>
+                                    <label class="clear">Optional link</label>
+                                    {{input class='size30 pull-left'value=linkUrl placeholder='URL'}}
+                                    {{input class='size70 pull-right'value=linkText placeholder="What's at that URL?"}}
+                                </fieldset>
+                            </form>
 
-                        <div>
-                            <button class="btn btn--success" {{bindAttr disabled='isInvalid'}} {{action 'saveNode' this}}>Save</button>
-                            <button class="btn" {{action 'cancelNode' this}}>Cancel</button>
-                            {{#unless controller.isNewNode}}
-                                <button class="btn btn--danger pull-right" {{action 'deleteNode' this}}>Delete</button>
-                            {{/unless}}
-                        </div>
-                    </li>
+                            <div>
+                                <button class="btn btn--success" {{bindAttr disabled='isInvalid'}} {{action 'saveNode' this}}>Save</button>
+                                <button class="btn" {{action 'cancelNode' this}}>Cancel</button>
+                                {{#unless controller.isNewNode}}
+                                    <button class="btn btn--danger pull-right" {{action 'deleteNode' this}}>Delete</button>
+                                {{/unless}}
+                            </div>
+                        </li>
+                    {{/view}}
                 {{else}}
                     <li class="tl-node">
                         {{#if controller.isAdmin}}

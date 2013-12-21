@@ -17,9 +17,7 @@ App.Router.map(function() {
 
 App.ApplicationRoute = Ember.Route.extend({
 
-  isAdmin: false,
-
-  isLoggedIn: false,
+  isLoggedIn: true,
 
   activate: function() {
     if (this.get('isLoggedIn')) {
@@ -31,7 +29,8 @@ App.ApplicationRoute = Ember.Route.extend({
 
   actions: {
     checkLogin: function(pass) {
-      var _this = this;
+      var _this = this,
+        controller = this.controllerFor('application');
 
       $.post('/api/auth', {
         password: pass
@@ -39,7 +38,8 @@ App.ApplicationRoute = Ember.Route.extend({
         .then(function(res) {
 
           if (res.login) {
-            _this.set('isLoggedIn', true);
+            controller.set('isLoggedIn', true);
+            controller.set('isAdmin', true);
             _this.transitionTo('timeline');
           } else {
             console.log('Failed');
@@ -47,7 +47,10 @@ App.ApplicationRoute = Ember.Route.extend({
         });
     }
   }
+});
 
+App.ApplicationController = Ember.Controller.extend({
+  isAdmin: true
 });
 
 App.LoginController = Ember.Controller.extend({
@@ -61,21 +64,28 @@ App.LoginController = Ember.Controller.extend({
 });
 
 App.TimelineRoute = Ember.Route.extend({
-  setupController: function(controller) {
-    controller.set('isAdmin', this.get('isAdmin'));
+  model: function() {
+    return $.get('/api/events')
+      .then(function(res) {
+        var arr = [];
+        res.forEach(function(event) {
+          arr.push(App.Node.create(event));
+        });
+        return arr;
+      });
+  },
+  setupController: function(controller, model) {
+
+    controller.set('nodes', model);
+    this._super();
   }
 });
 
 App.TimelineController = Ember.Controller.extend({
-  isAdmin: null,
+  needs: ['application'],
+  isAdmin: Em.computed.alias('controllers.application.isAdmin'),
 
-  nodes: [App.Node.create({
-    date: moment()
-      .format('MMM Do YYYY'),
-    content: 'Project kickoff meeting',
-    linkUrl: '#',
-    linkText: 'View the notes'
-  })],
+  nodes: [],
 
   isNewNode: false,
 
@@ -94,8 +104,29 @@ App.TimelineController = Ember.Controller.extend({
       this.set('isNewNode', true);
     },
     saveNode: function(node) {
+
+      // If we have an id, it was retrieved from the API, so put it.
+      if (node.get('_id')) {
+        $.ajax({
+          url: '/api/events',
+          type: 'PUT',
+          data: node.getProperties('date', 'content', 'linkIrl', 'linkText', '_id')
+        })
+          .then(function(res) {
+            node.setProperties(res);
+          });
+      } else {
+
+        // Otherwise it's a new event, so post it.
+        $.post('/api/events', node.getProperties('date', 'content', 'linkIrl', 'linkText'))
+          .then(function(res) {
+            node.setProperties(res);
+          });
+      }
+
       node.set('isEditing', false);
       this.set('isNewNode', false);
+
     },
 
     deleteNode: function(node) {
@@ -103,6 +134,16 @@ App.TimelineController = Ember.Controller.extend({
         this.set('isNewNode', false);
         this.get('nodes')
           .removeObject(node);
+
+        $.ajax({
+          url: '/api/events',
+          type: 'DELETE',
+          data: node.getProperties('_id')
+        })
+          .then(function(res) {
+            node.setProperties(res);
+          });
+
       }
     },
 
@@ -122,8 +163,10 @@ App.TimelineController = Ember.Controller.extend({
   }
 });
 
-App.InstantFocusView = Ember.View.extend({
+App.NodeEditView = Ember.View.extend({
   didInsertElement: function() {
+
+    // Focus on the text area
     this.$('textarea')
       .focus();
   }
