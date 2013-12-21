@@ -3,6 +3,10 @@ App = Ember.Application.create();
 App.Node = Ember.Object.extend({
   isEditing: false,
   date: '',
+  epoch: function() {
+    // debugger;
+    return moment(this.get('date'), 'MMM-D-YYYY').toDate();
+  }.property('date'),
   content: '',
   linkUrl: '',
   linkText: '',
@@ -64,14 +68,21 @@ App.LoginController = Ember.Controller.extend({
 });
 
 App.TimelineRoute = Ember.Route.extend({
+  /**
+    TODO:
+      - Order the events as they come in by date
+  */
+
   model: function() {
     return $.get('/api/events')
       .then(function(res) {
         var arr = [];
         res.forEach(function(event) {
-          arr.push(App.Node.create(event));
+          var node = App.Node.create(event);
+          node.set('date', moment(node.get('epoch')).format('MMM Do YYYY'));
+          arr.push(node);
         });
-        return arr;
+        return arr.sortBy('epoch');
       });
   },
   setupController: function(controller, model) {
@@ -110,7 +121,7 @@ App.TimelineController = Ember.Controller.extend({
         $.ajax({
           url: '/api/events',
           type: 'PUT',
-          data: node.getProperties('date', 'content', 'linkIrl', 'linkText', '_id')
+          data: node.getProperties('epoch', 'content', 'linkIrl', 'linkText', '_id')
         })
           .then(function(res) {
             node.setProperties(res);
@@ -118,7 +129,7 @@ App.TimelineController = Ember.Controller.extend({
       } else {
 
         // Otherwise it's a new event, so post it.
-        $.post('/api/events', node.getProperties('date', 'content', 'linkIrl', 'linkText'))
+        $.post('/api/events', node.getProperties('epoch', 'content', 'linkIrl', 'linkText'))
           .then(function(res) {
             node.setProperties(res);
           });

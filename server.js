@@ -73,9 +73,9 @@ app.put('/api/events', function(req, res) {
   var event = req.body;
   db.update({
     _id: event._id
-  }, event, {}, function(err) {
+  }, event, {}, function(err, updatedDoc) {
     res.status(200)
-      .send();
+      .send(updatedDoc);
   });
 });
 
