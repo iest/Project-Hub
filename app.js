@@ -4,8 +4,8 @@ App.Node = Ember.Object.extend({
   isEditing: false,
   date: '',
   epoch: function() {
-    // debugger;
-    return moment(this.get('date'), 'MMM-D-YYYY').toDate();
+    return moment(this.get('date'), 'MMM D YYYY')
+      .valueOf();
   }.property('date'),
   content: '',
   linkUrl: '',
@@ -36,19 +36,19 @@ App.ApplicationRoute = Ember.Route.extend({
       var _this = this,
         controller = this.controllerFor('application');
 
-      $.post('/api/auth', {
-        password: pass
-      })
-        .then(function(res) {
+      // $.post('/api/auth', {
+      //   password: pass
+      // })
+      //   .then(function(res) {
 
-          if (res.login) {
-            controller.set('isLoggedIn', true);
-            controller.set('isAdmin', true);
-            _this.transitionTo('timeline');
-          } else {
-            console.log('Failed');
-          }
-        });
+      //     if (res.login) {
+      //       controller.set('isLoggedIn', true);
+      //       controller.set('isAdmin', true);
+      //       _this.transitionTo('timeline');
+      //     } else {
+      //       console.log('Failed');
+      //     }
+      //   });
     }
   }
 });
@@ -68,27 +68,46 @@ App.LoginController = Ember.Controller.extend({
 });
 
 App.TimelineRoute = Ember.Route.extend({
-  /**
-    TODO:
-      - Order the events as they come in by date
-  */
 
   model: function() {
+
+    var _this = this;
+
     return $.get('/api/events')
       .then(function(res) {
         var arr = [];
         res.forEach(function(event) {
           var node = App.Node.create(event);
-          node.set('date', moment(node.get('epoch')).format('MMM Do YYYY'));
+
+          var niceDate = moment(parseFloat(node.get('epoch')))
+            .format('MMM Do YYYY');
+
+          node.set('date', niceDate);
+
           arr.push(node);
         });
-        return arr.sortBy('epoch');
+        return arr.sort(function(a, b) {
+          if (a.epoch < b.epoch) {
+            return 1;
+          } else if (a.epoch > b.epoch) {
+            return -1;
+          }
+          return 0;
+        });
+      })
+      .fail(function(fail) {
+        _this.send('handleFail', fail);
       });
   },
   setupController: function(controller, model) {
-
     controller.set('nodes', model);
     this._super();
+  },
+
+  actions: {
+    handleFail: function(fail) {
+      console.log('Failed');
+    }
   }
 });
 
@@ -116,6 +135,8 @@ App.TimelineController = Ember.Controller.extend({
     },
     saveNode: function(node) {
 
+      var _this = this;
+
       // If we have an id, it was retrieved from the API, so put it.
       if (node.get('_id')) {
         $.ajax({
@@ -125,6 +146,9 @@ App.TimelineController = Ember.Controller.extend({
         })
           .then(function(res) {
             node.setProperties(res);
+          })
+          .fail(function(fail) {
+            _this.send('handleFail', fail);
           });
       } else {
 
@@ -138,9 +162,15 @@ App.TimelineController = Ember.Controller.extend({
       node.set('isEditing', false);
       this.set('isNewNode', false);
 
+      this.set('nodes', this.get('nodes')
+        .sortBy('epoch'));
+
     },
 
     deleteNode: function(node) {
+
+      var _this = this;
+
       if (confirm('Are you sure you want to delete this node?')) {
         this.set('isNewNode', false);
         this.get('nodes')
@@ -153,6 +183,9 @@ App.TimelineController = Ember.Controller.extend({
         })
           .then(function(res) {
             node.setProperties(res);
+          })
+          .fail(function(fail) {
+            _this.send('handleFail', fail);
           });
 
       }
