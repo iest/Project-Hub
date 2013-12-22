@@ -225,9 +225,17 @@ App.TimelineController = Ember.Controller.extend({
 
 App.NodeEditView = Ember.View.extend({
   didInsertElement: function() {
-
     // Focus on the text area
     this.$('textarea')
       .focus();
+  }
+});
+
+App.XPikadayComponent = Ember.TextField.extend({
+  didInsertElement: function() {
+    var picker = new Pikaday({
+      field: this.$()[0],
+      format: 'MMM Do YYYY'
+    });
   }
 });

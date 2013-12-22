@@ -5,6 +5,7 @@
         <title>WIP Project Timeline</title>
         <meta name="viewport" content="width=device-width" />
         <link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
+        <link rel="stylesheet" type="text/css" href="bower_components/pikaday/css/pikaday.css">
     </head>
     <body>
 
@@ -42,7 +43,7 @@
                                 <fieldset>
                                     <label for='date'>Date</label>
                                     <button class="btn btn--today" {{action 'setToday' this}}>Today</button>
-                                    {{input name='date' value=date placeholder='When did it happen?'}}
+                                    {{x-pikaday name='date' value=date placeholder='When did it happen?'}}
                                 </fieldset>
                                 <fieldset>
                                     <label>What happened?</label>
@@ -83,6 +84,7 @@
     <script src="bower_components/ember-starter-kit/js/libs/handlebars-1.1.2.js"></script>
     <script src="bower_components/ember-starter-kit/js/libs/ember-1.2.0.js"></script>
     <script src="bower_components/momentjs/min/moment.min.js"></script>
+    <script src="bower_components/pikaday/pikaday.js"></script>
     <script src="app.js"></script>
 
     </body>
