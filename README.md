@@ -37,6 +37,7 @@ Read more about [project hubs on 24 Ways.](http://24ways.org/2013/project-hubs/)
 
 
 ### To do
+- [ ] Persistance of login (cookie-based probably)
 - [ ] Ability to turn off authentication
 - [ ] Super simple deployment to heroku or similar
 - [ ] Prouction-ify client app (current size is ~1.4MB, should be more like 300KB)
