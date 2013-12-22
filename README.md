@@ -7,7 +7,7 @@ This is a heavy fork of [Brad Frost](http://bradfrostweb.com)'s [Project Hub HTM
 
 I really wanted to use project hubs for client work, but wanted something that non-techie users could manage, and would be faster than having to write html to update it.
 
-**This is still a work-in-progress**. If you have any problems or requests, file an issue or hit me up on twitter [@_iest](http://twitter.com/_iest).
+**This is still a work-in-progress**. If you have any problems or requests, [file an issue](https://github.com/iest/Project-Hub/issues/new) or hit me up on twitter [@_iest](http://twitter.com/_iest).
 
 ### Features
 
