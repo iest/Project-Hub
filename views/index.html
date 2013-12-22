@@ -11,6 +11,9 @@
 
     <script type="text/x-handlebars">
         {{outlet}}
+        <div class="error">
+            {{error}}
+        </div>
     </script>
 
     <script type="text/x-handlebars", data-template-name='login'>
@@ -20,6 +23,7 @@
                 {{input value=password type='password'}}
             </fieldset>
             <button class="btn" {{action 'login' password}}>Login</button>
+            {{message}}
         </form>
     </script>
 

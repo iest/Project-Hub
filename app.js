@@ -21,7 +21,7 @@ App.Router.map(function() {
 
 App.ApplicationRoute = Ember.Route.extend({
 
-  isLoggedIn: true,
+  isLoggedIn: false,
 
   activate: function() {
     if (this.get('isLoggedIn')) {
@@ -36,19 +36,21 @@ App.ApplicationRoute = Ember.Route.extend({
       var _this = this,
         controller = this.controllerFor('application');
 
-      // $.post('/api/auth', {
-      //   password: pass
-      // })
-      //   .then(function(res) {
-
-      //     if (res.login) {
-      //       controller.set('isLoggedIn', true);
-      //       controller.set('isAdmin', true);
-      //       _this.transitionTo('timeline');
-      //     } else {
-      //       console.log('Failed');
-      //     }
-      //   });
+      $.post('/api/auth', {
+        password: pass
+      })
+        .then(function(res) {
+          if (res.login) {
+            controller.set('isLoggedIn', true);
+            controller.set('isAdmin', res.isAdmin);
+            _this.transitionTo('timeline');
+          } else {
+            _this.controllerFor('login').set('message', 'Incorrect login or password');
+          }
+        })
+        .fail(function() {
+          controller.set('error', 'Failed to check login');
+        });
     }
   }
 });

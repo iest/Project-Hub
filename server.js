@@ -28,27 +28,35 @@ app.post('/api/auth', function(req, res) {
   fs.readFile('passwd', function(err, data) {
     if (err) throw err;
 
-    // var configRegex = /^([a-zA-Z_]\w*)\s*=\s*([^#]+?)$/;
-    var actual = data.toString();
+    var pairs = [];
+    data = data.toString();
+    data.split('\n')
+      .forEach(function(item) {
+        var key = item.split('=')[0],
+          value = item.split('=')[1];
+        pairs[key] = value;
+      });
 
-    // var passwords = data.match(configRegex);
-
-    // console.log(passwords);
-
-    if (actual === pass) {
+    // If pass is empty, the user can log straight in
+    if (pairs.admin === pass) {
       res.status(200)
         .type('json')
         .send({
-          login: true
+          login: true,
+          isAdmin: true
+        });
+    } else if (pairs.readonly === pass) {
+      res.status(200)
+        .type('json')
+        .send({
+          login: true,
+          isAdmin: false
         });
     } else {
-      res.status(200)
-        .type('json')
-        .send({
-          login: false
-        });
+      res.status(200).type('json').send({
+        login: false
+      });
     }
-
   });
 });
 
