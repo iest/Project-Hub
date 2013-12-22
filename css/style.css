@@ -177,8 +177,7 @@ h3 {
 .tl-node {
   padding-left: 1em;
   margin-bottom: 3em;
-  position: relative;
-  }
+  position: relative;}
   .tl-node .link {
     display: block; }
   .tl-node:before {

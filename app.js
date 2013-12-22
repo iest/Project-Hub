@@ -156,14 +156,30 @@ App.TimelineController = Ember.Controller.extend({
         $.post('/api/events', node.getProperties('epoch', 'content', 'linkIrl', 'linkText'))
           .then(function(res) {
             node.setProperties(res);
+
+            var sorted = [];
+            _this.get('nodes')
+              .forEach(function(item) {
+                sorted.pushObject(item);
+              });
+
+            sorted = sorted.sort(function(a, b) {
+              if (a.epoch < b.epoch) {
+                return 1;
+              } else if (a.epoch > b.epoch) {
+                return -1;
+              }
+              return 0;
+            });
+
+            _this.set('nodes', null);
+            _this.set('nodes', sorted);
+
           });
       }
 
       node.set('isEditing', false);
       this.set('isNewNode', false);
-
-      this.set('nodes', this.get('nodes')
-        .sortBy('epoch'));
 
     },
 
