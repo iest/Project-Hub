@@ -1,7 +1,7 @@
 # Project Hub
 A simple web app to manage a project timeline.
 
-## What is this?
+View a [demo](http://test.iestynwilliams.net:3001/#/timeline) (login with the password: 'read' or 'write').
 
 This is a heavy fork of [Brad Frost](http://bradfrostweb.com)'s [Project Hub HTML template](https://github.com/bradfrost/project-hub).
 

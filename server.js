@@ -25,9 +25,11 @@ app.get('/', function(req, res) {
 app.post('/api/auth', function(req, res) {
   var pass = req.body.password;
 
+  // Read the password file
   fs.readFile('passwd', function(err, data) {
     if (err) throw err;
 
+    // Split the passwd file into key:value pairs
     var pairs = [];
     data = data.toString();
     data.split('\n')
