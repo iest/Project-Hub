@@ -41,3 +41,13 @@ Read more about [project hubs on 24 Ways.](http://24ways.org/2013/project-hubs/)
 - [ ] Ability to turn off authentication
 - [ ] Super simple deployment to heroku or similar
 - [ ] Prouction-ify client app (current size is ~1.4MB, should be more like 300KB)
+
+
+### Ramblings
+- If set to `private`, both users have to login.
+Current functionality.
+
+- If set to `login`, everyone can access the timeline but admins have to login
+Could render the timeline as-is using just the server (no client app). Could have an `/edit` route that would then render the ember app.
+
+- If set to public everyone can access & edit

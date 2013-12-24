@@ -15,7 +15,6 @@
   ],
   "dependencies": {
     "ember-starter-kit": "~1.2.0",
-    "momentjs": "~2.4.0",
     "pikaday": "~1.1.0"
   }
 }

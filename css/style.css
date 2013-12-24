@@ -255,6 +255,14 @@ h3 {
   font-size: 0.7em;
   color: gray; }
 
+.login {
+  position: absolute;
+  top: 0;
+  right: 0.5em;
+  font-size: 0.8em;
+  color: #E5E5E5;
+}
+
 /************End Timeline**************/
 
 .weak {

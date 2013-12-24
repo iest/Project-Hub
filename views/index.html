@@ -2,94 +2,25 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>WIP Project Timeline</title>
+        <title><%= project_name %></title>
         <meta name="viewport" content="width=device-width" />
         <link rel="stylesheet" type="text/css" href="/css/style.css" media="all" />
-        <link rel="stylesheet" type="text/css" href="/bower_components/pikaday/css/pikaday.css">
     </head>
     <body>
+        <a class='login' href="/edit">Login</a>
+        <h1><%= project_name %></h1>
 
-    <script type="text/x-handlebars">
-        {{outlet}}
-        <div class="error">
-            {{error}}
-        </div>
-    </script>
-
-    <script type="text/x-handlebars", data-template-name='login'>
-        <form>
-            <fieldset>
-                <label>Password</label>
-                {{input value=password type='password'}}
-            </fieldset>
-            <button class="btn" {{action 'login' password}}>Login</button>
-            {{message}}
-        </form>
-    </script>
-
-    <script type="text/x-handlebars" data-template-name='timeline'>
-        <h1>WIP Project Timeline</h1>
-        {{#if isAdmin}}
-            {{#unless isNewNode}}
-                <div class="tl-node--new">
-                    <button class="btn" {{action 'newNode'}}>
-                        +
-                    </button>
-                </div>
-            {{/unless}}
-        {{/if}}
         <ol class="timeline">
-            {{#each nodes}}
-                {{#if isEditing}}
-                    {{#view App.NodeEditView}}
-                        <li class="tl-node tl-node--editing">
-                            <form>
-                                <fieldset>
-                                    <label for='date'>Date</label>
-                                    <button class="btn btn--today" {{action 'setToday' this}}>Today</button>
-                                    {{x-pikaday name='date' value=date placeholder='When did it happen?'}}
-                                </fieldset>
-                                <fieldset>
-                                    <label>What happened?</label>
-                                    {{textarea value=content placeholder="e.g. Project kickoff meeting"}}
-                                </fieldset>
-                                <fieldset>
-                                    <label class="clear">Optional link</label>
-                                    {{input class='size30 pull-left'value=linkUrl placeholder='URL'}}
-                                    {{input class='size70 pull-right'value=linkText placeholder="What's at that URL?"}}
-                                </fieldset>
-                            </form>
-
-                            <div>
-                                <button class="btn btn--success" {{bindAttr disabled='isInvalid'}} {{action 'saveNode' this}}>Save</button>
-                                <button class="btn" {{action 'cancelNode' this}}>Cancel</button>
-                                {{#unless controller.isNewNode}}
-                                    <button class="btn btn--danger pull-right" {{action 'deleteNode' this}}>Delete</button>
-                                {{/unless}}
-                            </div>
-                        </li>
-                    {{/view}}
-                {{else}}
-                    <li class="tl-node">
-                        {{#if controller.isAdmin}}
-                            <button class="showHover link pull-right small" {{action 'editNode' this}}>Edit</button>
-                        {{/if}}
-                        <div class="tl-stamp">{{date}}</div>
-                        <div class="tl-content">{{content}}</div>
-                        <a {{bindAttr href='linkUrl'}}>{{linkText}}</a>
-                    </li>
-                {{/if}}
-            {{/each}}
+            <% for(var i=0; i < nodes.length; i++)
+            { %>
+                <li class="tl-node">
+                    <div class="tl-stamp"><%= moment(parseFloat(nodes[i].epoch)).format('MMM Do YYYY') %></div>
+                    <div class="tl-content"><%= nodes[i].content %></div>
+                    <a href=<%= nodes[i].linkUrl %>><%= nodes[i].linkText %></a>
+                </li>
+            <% } %>
         </ol>
     </script>
-
-
-    <script src="/bower_components/ember-starter-kit/js/libs/jquery-1.10.2.js"></script>
-    <script src="/bower_components/ember-starter-kit/js/libs/handlebars-1.1.2.js"></script>
-    <script src="/bower_components/ember-starter-kit/js/libs/ember-1.2.0.js"></script>
-    <script src="/bower_components/momentjs/min/moment.min.js"></script>
-    <script src="/bower_components/pikaday/pikaday.js"></script>
-    <script src="/app.js"></script>
 
     </body>
 </html>
