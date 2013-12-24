@@ -115,9 +115,6 @@ App.TimelineController = Ember.Controller.extend({
   isNewNode: false,
 
   actions: {
-    setToday: function(node) {
-      node.set('epoch', new Date().getTime());
-    },
     newNode: function() {
       var node = App.Node.create();
       node.setProperties({
@@ -233,8 +230,9 @@ App.XPikadayComponent = Ember.Component.extend({
   }.observes('formatted'),
 
   willInsertElement: function() {
-    var epoch = this.get('epoch'),
+    var epoch = this.get('epoch') || new Date().getTime(),
       formatted = moment(parseFloat(epoch)).format('MMM Do YYYY');
+
     this.set('formatted', formatted);
   },
 
@@ -244,6 +242,12 @@ App.XPikadayComponent = Ember.Component.extend({
       field: _this.$('input')[0],
       format: 'MMM Do YYYY'
     });
+  },
+
+  actions: {
+    setToday: function() {
+      this.set('formatted', moment().format('MMM Do YYYY'));
+    }
   }
 });
 
