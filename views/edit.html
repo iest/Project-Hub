@@ -16,7 +16,7 @@
 
     <script type="text/x-handlebars">
         {{#if isLoggedIn}}
-            <a class='login' href='/'>Logout</a>
+            <button class="link login" {{action logout}}>Logout</button>
         {{/if}}
 
         {{#if error}}
@@ -33,10 +33,14 @@
         <form>
             <fieldset>
                 <label>Password</label>
+                {{message}}
                 {{input value=password type='password'}}
             </fieldset>
-            <button class="btn" {{action 'login' password}}>Login</button>
-            {{message}}
+            <button class="btn" {{action 'attemptLogin' password}}>Login</button>
+            <fieldset>
+                {{input name='persist' checked=persistLogin type='checkbox'}}
+                <label for='persist'>Keep me logged in</label>
+            </fieldset>
         </form>
     </script>
 
@@ -49,14 +53,12 @@
 
     <script type="text/x-handlebars" data-template-name='timeline'>
         <h1><%= project_name %></h1>
-        {{#if isAdmin}}
-            {{#unless isNewNode}}
+        {{#if controllers.application.isAdmin}}
                 <div class="tl-node--new">
                     <button class="btn" {{action 'newNode'}}>
                         +
                     </button>
                 </div>
-            {{/unless}}
         {{/if}}
         <ol class="timeline">
             {{#each nodes}}

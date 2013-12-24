@@ -41,6 +41,10 @@ button.link {
   background: transparent;
   border: 0;
   cursor: pointer;
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font-family: "HelveticaNeue", "Helvetica", "Arial", sans-serif;
 }
 
 a:hover, a:focus, .link:hover, .link:focus {
@@ -58,7 +62,8 @@ a img {
   border: 0;
   outline: 0; }
 
-input,
+input[type='text'],
+input[type='password'],
 textarea {
   font: 100%/1.4 "HelveticaNeue", "Helvetica", "Arial", sans-serif;
   font-weight: lighter;
@@ -235,7 +240,7 @@ h3 {
   height: 5em;}
 .tl-node--new .btn {
   min-width: 0;
-  /*border-radius: 1;*/
+  background-color: white;
   position: relative;
   display: block;
   bottom: 10px;

@@ -30,10 +30,8 @@ var permission_type = util.getConfig().permissions;
 if (permission_type === 'login') {
   // Index
   app.get('/', function(req, res) {
-
     db.find({}, function(err, docs) {
       if (err) throw err;
-
       res.render('index.html', {
         project_name: util.getConfig().project_name,
         nodes: docs
@@ -44,7 +42,6 @@ if (permission_type === 'login') {
 
   // Editing
   app.get('/edit', function(req, res) {
-
     res.render('edit.html', {
       project_name: util.getConfig().project_name,
       test: permission_type
@@ -55,7 +52,6 @@ if (permission_type === 'login') {
   app.get('/', function(req, res) {
     db.find({}, function(err, docs) {
       if (err) throw err;
-
       res.render('edit.html', {
         project_name: util.getConfig()
           .project_name,

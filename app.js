@@ -31,14 +31,21 @@ App.ApplicationRoute = Ember.Route.extend({
         controller = this.controllerFor('application');
 
       if (ENV.permissions === 'private' || ENV.permissions === 'login') {
+
+        if (docCookies.getItem('phub_admin')) {
+          var isAdmin = docCookies.getItem('phub_admin');
+          this.send('login', isAdmin);
+          return;
+        }
+
         $.post('/api/auth', {
           password: pass
         })
           .then(function(res) {
             if (res.login) {
-              controller.set('isLoggedIn', true);
-              controller.set('isAdmin', res.isAdmin);
-              _this.transitionTo('timeline');
+              _this.send('login', res.isAdmin);
+              docCookies.setItem('phub_admin', res.isAdmin, Infinity);
+
             } else {
               _this.controllerFor('login')
                 .set('message', 'Incorrect login or password');
@@ -55,28 +62,45 @@ App.ApplicationRoute = Ember.Route.extend({
         controller.send('handleFail', 'Permissons arent set properly in the config file');
       }
     },
+    login: function(isAdmin) {
+      var controller = this.controllerFor('application');
+
+      controller.set('isLoggedIn', true);
+      controller.set('isAdmin', isAdmin || false);
+      this.transitionTo('timeline');
+    },
     handleFail: function(fail) {
-      this.controllerFor('application').set('error', fail);
+      this.controllerFor('application')
+        .set('error', fail);
     }
   }
 });
 
 App.ApplicationController = Ember.Controller.extend({
-    isLoggedIn: false,
-    isAdmin: false,
-    error: '',
-    actions: {
-      reload: function() {
-        document.location.reload(true);
-      }
+  isLoggedIn: function() {
+    return !!docCookies.getItem('phub_admin');
+  }.property(),
+  isAdmin: function() {
+    var isAdmin = docCookies.getItem('phub_admin');
+    return isAdmin === 'true' ? true: false;
+  }.property(),
+  error: '',
+  actions: {
+    reload: function() {
+      document.location.reload(true);
+    },
+    logout: function() {
+      docCookies.removeItem('phub_admin');
+      document.location = '/';
     }
+  }
 });
 
 App.LoginController = Ember.Controller.extend({
   password: '',
-
+  persistLogin: true,
   actions: {
-    login: function(password) {
+    attemptLogin: function(password) {
       this.send('checkLogin', password);
     }
   }
@@ -117,7 +141,9 @@ App.TimelineRoute = Ember.Route.extend({
 
 App.TimelineController = Ember.Controller.extend({
   needs: ['application'],
-  isAdmin: Em.computed.alias('controllers.application.isAdmin'),
+  isAdmin: function() {
+    return this.get('controllers.application.isAdmin');
+  }.property('controllers.application.isAdmin'),
 
   nodes: [],
 
@@ -268,3 +294,65 @@ Ember.Handlebars.registerBoundHelper('date', function(value) {
   return new moment(parseFloat(value))
     .format('MMM Do YYYY');
 });
+
+
+/*\
+|*|
+|*|  :: cookies.js ::
+|*|
+|*|  A complete cookies reader/writer framework with full unicode support.
+|*|
+|*|  https://developer.mozilla.org/en-US/docs/DOM/document.cookie
+|*|
+|*|  This framework is released under the GNU Public License, version 3 or later.
+|*|  http://www.gnu.org/licenses/gpl-3.0-standalone.html
+|*|
+|*|  Syntaxes:
+|*|
+|*|  * docCookies.setItem(name, value[, end[, path[, domain[, secure]]]])
+|*|  * docCookies.getItem(name)
+|*|  * docCookies.removeItem(name[, path], domain)
+|*|  * docCookies.hasItem(name)
+|*|  * docCookies.keys()
+|*|
+\*/
+
+var docCookies = {
+  getItem: function(sKey) {
+    return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey)
+      .replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+  },
+  setItem: function(sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+    if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) {
+      return false;
+    }
+    var sExpires = "";
+    if (vEnd) {
+      switch (vEnd.constructor) {
+        case Number:
+          sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + vEnd;
+          break;
+        case String:
+          sExpires = "; expires=" + vEnd;
+          break;
+        case Date:
+          sExpires = "; expires=" + vEnd.toUTCString();
+          break;
+      }
+    }
+    document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
+    return true;
+  },
+  removeItem: function(sKey, sPath, sDomain) {
+    if (!sKey || !this.hasItem(sKey)) {
+      return false;
+    }
+    document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
+    return true;
+  },
+  hasItem: function(sKey) {
+    return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey)
+      .replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\="))
+      .test(document.cookie);
+  }
+};
