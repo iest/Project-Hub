@@ -40,6 +40,7 @@ Read more about [project hubs on 24 Ways.](http://24ways.org/2013/project-hubs/)
 - [ ] Super simple deployment to heroku or similar
 - [ ] Prouction-ify client app (current size is ~1.4MB, should be more like 300KB)
 
+<<<<<<< HEAD
 
 ### Ramblings
 - If set to `private`, both users have to login.
@@ -49,3 +50,28 @@ Current functionality.
 Could render the timeline as-is using just the server (no client app). Could have an `/edit` route that would then render the ember app.
 
 - If set to public everyone can access & edit
+=======
+Server.js:
+- Check config on startup
+- Pull out permissions type
+  - If `login`
+    - '/': 'index.html'
+    - '/edit': 'edit.html'
+  - If `private`
+    - '/': 'edit.html'
+    - Setup auth API
+  - If `public`
+    - '/': 'edit.html'
+    - Disable auth API
+
+App.js:
+  - Get passed config type on initialisation
+  - login:
+    - Disable read-only auth
+  - private:
+    - Normal authentication
+  - public
+    - Set `isLoggedIn`, `isAdmin` to true on init
+
+For `private` and `public`, need to pass in the conf options to the Ember app
+>>>>>>> 526fb14... Cleaner server, permissions passed to client

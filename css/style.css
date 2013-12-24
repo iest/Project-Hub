@@ -87,7 +87,7 @@ textarea {
 
 .btn {
   min-width: 6em;
-  background: white;
+  background: transparent;
   font: 120%/1.4 "HelveticaNeue", "Helvetica", "Arial", sans-serif;
   color: #555;
   text-transform: uppercase;
@@ -250,7 +250,6 @@ h3 {
   border-color: #DDDDDD;
 }
 
-/* Timestamp */
 .tl-stamp {
   font-size: 0.7em;
   color: gray; }
@@ -263,7 +262,17 @@ h3 {
   color: #E5E5E5;
 }
 
-/************End Timeline**************/
+.error {
+  position: fixed;
+  z-index: 10000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  background: rgba(243,157,0,0.9);
+  color: white;
+  padding: 0.25em 0.5em;
+}
 
 .weak {
   font-size: 1em;

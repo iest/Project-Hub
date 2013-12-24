@@ -6,6 +6,11 @@
         <meta name="viewport" content="width=device-width" />
         <link rel="stylesheet" type="text/css" href="/css/style.css" media="all" />
         <link rel="stylesheet" type="text/css" href="/bower_components/pikaday/css/pikaday.css">
+        <script type="text/javascript">
+            var ENV = {
+                'permissions': '<%= test %>'
+            } 
+        </script>
     </head>
     <body>
 
@@ -14,10 +19,14 @@
             <a class='login' href='/'>Logout</a>
         {{/if}}
 
+        {{#if error}}
+            <div class="error">
+                {{error}}
+                <button {{action reload}}>Reload</button>
+            </div>
+        {{/if}}
+
         {{outlet}}
-        <div class="error">
-            {{error}}
-        </div>
     </script>
 
     <script type="text/x-handlebars", data-template-name='login'>

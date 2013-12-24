@@ -1,7 +1,7 @@
 var express = require('express');
-var fs = require('fs');
 var app = express();
 var moment = require('moment');
+var util = require('./helper');
 
 var Datastore = require('nedb'),
   db = new Datastore({
@@ -18,92 +18,85 @@ app.configure(function() {
   app.use(express.urlencoded());
 });
 
-// Config reading function
-function getConfig() {
+var permission_type = util.getConfig().permissions;
 
-  // Read the config file
-  var file = fs.readFileSync('config');
+/**
+  Setup our routes.
 
-  // Setup an array we'll use shortly
-  var pairs = [];
+  These will be different depening on the permission type set:
+    - 'login': 2 routes. One for viewing ('index.html'), one for editing ('edit.html')
+    - 'private' and 'public': 1 route ('edit.html'). Readonly and admin users are setup by the ember app inside edit.html
+*/
+if (permission_type === 'login') {
+  // Index
+  app.get('/', function(req, res) {
 
-  // Data comes out as a buffer, so stringify it
-  file.toString()
-  // Split it on newlines
-  .split('\n')
-  // Loop through each line
-  .forEach(function(item) {
-    // Split the item on the `=`
-    var pair = item.split('=');
-    // Make sure the item has `=` in it
-    if (!pair[1]) return;
-    // Set the nth item in the pairs array to be key:value from 'key=value'
-    pairs[item.split('=')[0]] = item.split('=')[1];
-  });
-  return pairs;
-}
+    db.find({}, function(err, docs) {
+      if (err) throw err;
 
-// Index
-app.get('/', function(req, res) {
+      res.render('index.html', {
+        project_name: util.getConfig().project_name,
+        nodes: docs
+      });
 
-  db.find({}, function(err, docs) {
-    if (err) throw err;
-
-    res.render('index.html', {
-      project_name: getConfig()
-        .project_name,
-      nodes: docs
     });
-
   });
-});
 
-// Editing
-app.get('/edit', function(req, res) {
+  // Editing
+  app.get('/edit', function(req, res) {
 
-  // I'm using EJS so can pass variables into the template on render
-  res.render('edit.html', {
-    project_name: getConfig()
-      .project_name
+    res.render('edit.html', {
+      project_name: util.getConfig().project_name,
+      test: permission_type
+    });
   });
-});
+} else {
 
+  app.get('/', function(req, res) {
+    db.find({}, function(err, docs) {
+      if (err) throw err;
+
+      res.render('edit.html', {
+        project_name: util.getConfig()
+          .project_name,
+        test: permission_type
+      });
+
+    });
+  });
+
+}
 
 
 // Authentication API
 app.post('/api/auth', function(req, res) {
   var pass = req.body.password;
 
-  // Read the password file
-  fs.readFile('config', function(err, data) {
-    if (err) throw err;
+  // Split the passwd file into key:value pairs
+  var pairs = util.getConfig();
 
-    // Split the passwd file into key:value pairs
-    var pairs = getConfig();
-
-    // If pass is empty, the user can log straight in
-    if (pairs.admin_password === pass) {
-      res.status(200)
-        .type('json')
-        .send({
-          login: true,
-          isAdmin: true
-        });
-    } else if (pairs.readonly_password === pass) {
-      res.status(200)
-        .type('json')
-        .send({
-          login: true,
-          isAdmin: false
-        });
-    } else {
-      res.status(200)
-        .type('json')
-        .send({
-          login: false
-        });
-    }
-  });
+  // If pass is empty, the user can log straight in
+  if (pairs.admin_password === pass) {
+    res.status(200)
+      .type('json')
+      .send({
+        login: true,
+        isAdmin: true
+      });
+  } else if (pairs.readonly_password === pass) {
+    res.status(200)
+      .type('json')
+      .send({
+        login: true,
+        isAdmin: false
+      });
+  } else {
+    res.status(200)
+      .type('json')
+      .send({
+        login: false
+      });
+  }
 });
 
 // GET
@@ -130,10 +123,12 @@ app.put('/api/events', function(req, res) {
     _id: event._id
   }, event, {}, function(err, numReplaced) {
     if (err) {
-      res.status(500).send();
+      res.status(500)
+        .send();
       throw err;
     }
-    res.status(200).send();
+    res.status(200)
+      .send();
   });
 });
 
@@ -147,6 +142,7 @@ app.delete('/api/events', function(req, res) {
       .send();
   });
 });
+
 
 
 app.use(function(req, res) {

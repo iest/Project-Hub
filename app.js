@@ -25,35 +25,51 @@ App.ApplicationRoute = Ember.Route.extend({
       this.transitionTo('login');
     }
   },
-
   actions: {
     checkLogin: function(pass) {
       var _this = this,
         controller = this.controllerFor('application');
 
-      $.post('/api/auth', {
-        password: pass
-      })
-        .then(function(res) {
-          if (res.login) {
-            controller.set('isLoggedIn', true);
-            controller.set('isAdmin', res.isAdmin);
-            _this.transitionTo('timeline');
-          } else {
-            _this.controllerFor('login')
-              .set('message', 'Incorrect login or password');
-          }
+      if (ENV.permissions === 'private' || ENV.permissions === 'login') {
+        $.post('/api/auth', {
+          password: pass
         })
-        .fail(function() {
-          controller.set('error', 'Failed to check login');
-        });
+          .then(function(res) {
+            if (res.login) {
+              controller.set('isLoggedIn', true);
+              controller.set('isAdmin', res.isAdmin);
+              _this.transitionTo('timeline');
+            } else {
+              _this.controllerFor('login')
+                .set('message', 'Incorrect login or password');
+            }
+          })
+          .fail(function() {
+            controller.set('error', 'Failed to check login');
+          });
+      } else if (ENV.permissions === 'public') {
+        controller.set('isLoggedIn', true);
+        controller.set('isAdmin', true);
+        _this.transitionTo('timeline');
+      } else {
+        controller.send('handleFail', 'Permissons arent set properly in the config file');
+      }
+    },
+    handleFail: function(fail) {
+      this.controllerFor('application').set('error', fail);
     }
   }
 });
 
 App.ApplicationController = Ember.Controller.extend({
-  isLoggedIn: true,
-  isAdmin: true
+    isLoggedIn: false,
+    isAdmin: false,
+    error: '',
+    actions: {
+      reload: function() {
+        document.location.reload(true);
+      }
+    }
 });
 
 App.LoginController = Ember.Controller.extend({
@@ -90,19 +106,12 @@ App.TimelineRoute = Ember.Route.extend({
         });
       })
       .fail(function(fail) {
-        _this.send('handleFail', fail);
+        _this.send('handleFail', 'Failed to fetch events. Is the server running?');
       });
   },
   setupController: function(controller, model) {
     controller.set('nodes', model);
     this._super();
-  },
-
-  actions: {
-    handleFail: function(fail) {
-      console.log('Failed');
-      console.log(fail);
-    }
   }
 });
 
@@ -139,7 +148,7 @@ App.TimelineController = Ember.Controller.extend({
           data: node.getProperties('epoch', 'content', 'linkUrl', 'linkText', '_id')
         })
           .fail(function(fail) {
-            _this.send('handleFail', fail);
+            _this.send('handleFail', 'Failed to save the event. Please try again.');
           });
       } else {
 
@@ -192,7 +201,7 @@ App.TimelineController = Ember.Controller.extend({
             node.setProperties(res);
           })
           .fail(function(fail) {
-            _this.send('handleFail', fail);
+            _this.send('handleFail', 'Failed to delete node. Please try again');
           });
 
       }
@@ -225,13 +234,16 @@ App.XPikadayComponent = Ember.Component.extend({
 
   setEpoch: function() {
     var formatted = this.get('formatted'),
-      newEpoch = moment(formatted, 'MMM D YYYY').valueOf();
+      newEpoch = moment(formatted, 'MMM D YYYY')
+        .valueOf();
     this.set('epoch', newEpoch);
   }.observes('formatted'),
 
   willInsertElement: function() {
-    var epoch = this.get('epoch') || new Date().getTime(),
-      formatted = moment(parseFloat(epoch)).format('MMM Do YYYY');
+    var epoch = this.get('epoch') || new Date()
+      .getTime(),
+      formatted = moment(parseFloat(epoch))
+        .format('MMM Do YYYY');
 
     this.set('formatted', formatted);
   },
@@ -246,7 +258,8 @@ App.XPikadayComponent = Ember.Component.extend({
 
   actions: {
     setToday: function() {
-      this.set('formatted', moment().format('MMM Do YYYY'));
+      this.set('formatted', moment()
+        .format('MMM Do YYYY'));
     }
   }
 });
