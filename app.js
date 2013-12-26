@@ -26,7 +26,7 @@ App.ApplicationRoute = Ember.Route.extend({
     }
   },
   actions: {
-    checkLogin: function(pass) {
+    checkLogin: function(pass, persist) {
       var _this = this,
         controller = this.controllerFor('application');
 
@@ -44,7 +44,9 @@ App.ApplicationRoute = Ember.Route.extend({
           .then(function(res) {
             if (res.login) {
               _this.send('login', res.isAdmin);
-              docCookies.setItem('phub_admin', res.isAdmin, Infinity);
+              if (persist) {
+                docCookies.setItem('phub_admin', res.isAdmin, Infinity);
+              }
 
             } else {
               _this.controllerFor('login')
@@ -101,7 +103,8 @@ App.LoginController = Ember.Controller.extend({
   persistLogin: true,
   actions: {
     attemptLogin: function(password) {
-      this.send('checkLogin', password);
+      var persist = this.get('persistLogin');
+      this.send('checkLogin', password, persist);
     }
   }
 });

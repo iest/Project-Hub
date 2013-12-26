@@ -76,6 +76,11 @@ textarea {
     border-color: #0090FF;
 }
 
+input[type=password] {
+  font-size: 1em;
+  border: 1px solid #999;
+}
+
 /*::-webkit-input-placeholder {
    color: red;
 }
