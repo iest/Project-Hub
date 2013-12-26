@@ -6,6 +6,9 @@
         <meta name="viewport" content="width=device-width" />
         <link rel="stylesheet" type="text/css" href="/css/style.css" media="all" />
         <link rel="stylesheet" type="text/css" href="/bower_components/pikaday/css/pikaday.css">
+
+        <script type="text/javascript" src='http://localhost:35729/livereload.js'></script>
+
         <script type="text/javascript">
             var ENV = {
                 'permissions': '<%= test %>'
@@ -45,39 +48,35 @@
     </script>
 
     <script type="text/x-handlebars" data-template-name='components/x-pikaday'>
-        <button class="btn btn--today" {{action 'setToday' this}}>
-            Today
-        </button>
-        {{input value=formatted class='size100' placeholder=placeholder}}
+        {{input value=formatted placeholder=placeholder}}
     </script>
 
     <script type="text/x-handlebars" data-template-name='timeline'>
         <h1><%= project_name %></h1>
-        {{#if controllers.application.isAdmin}}
-                <div class="tl-node--new">
-                    <button class="btn" {{action 'newNode'}}>
-                        +
-                    </button>
-                </div>
-        {{/if}}
+        {{#unless isNewNode}}
+            {{#if controllers.application.isAdmin}}
+                    <div class="tl-node--new">
+                        <button class="btn" {{action 'newNode'}}>
+                            +
+                        </button>
+                    </div>
+            {{/if}}
+        {{/unless}}
         <ol class="timeline">
             {{#each nodes}}
                 {{#if isEditing}}
                     {{#view App.NodeEditView}}
-                        <li class="tl-node tl-node--editing">
-                            <form>
-                                <fieldset>
-                                    <label for='date'>Date</label>
+                        <li class="tl-node">
+                            <form class='form'>
+                                <fieldset class='form__date'>
                                     {{x-pikaday name='date' epoch=epoch placeholder='When did it happen?'}}
                                 </fieldset>
-                                <fieldset>
-                                    <label>What happened?</label>
-                                    {{textarea class='size100' value=content placeholder="e.g. Project kickoff meeting"}}
+                                <fieldset class='form__content'>
+                                    {{input value=content placeholder="e.g. Project kickoff meeting" class='size100'}}
                                 </fieldset>
-                                <fieldset>
-                                    <label class="clear">Optional link</label>
-                                    {{input class='size30 pull-left'value=linkUrl placeholder='URL'}}
-                                    {{input class='size70 pull-right'value=linkText placeholder="What's at that URL?"}}
+                                <fieldset class='form__link'>
+                                {{input value=linkText placeholder="Link text"}}
+                                {{input value=linkUrl placeholder='URL'}}
                                 </fieldset>
                             </form>
 

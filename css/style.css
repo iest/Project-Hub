@@ -62,13 +62,13 @@ a img {
   border: 0;
   outline: 0; }
 
-input[type='text'],
-input[type='password'],
+input,
 textarea {
-  font: 100%/1.4 "HelveticaNeue", "Helvetica", "Arial", sans-serif;
+  font-family: "HelveticaNeue", "Helvetica", "Arial", sans-serif;
   font-weight: lighter;
   color: #555;
-  border: 1px solid #ddd;
+  border: none;
+  border-bottom: 1px dotted #999;
   padding: 0.25em;}
   input:focus,
   textarea:focus {
@@ -315,7 +315,32 @@ h3 {
 }
 
 .btn--today {
-  position: absolute;
-  right: 1em;
-  top: 3.4em;
+  float: right;
+  /*position: absolute;*/
+  /*right: 1em;*/
+  /*top: 3.4em;*/
+}
+
+
+
+.form input {
+  padding: 0;
+  vertical-align: bottom;
+  margin: 0;
+  line-height: 1em;
+}
+
+.form__date input {
+  font-size: 0.7em;
+  color: #808080;
+}
+
+.form__content input {
+  font-size: 1em;
+  color: #222222;
+}
+
+.form__link input:first-child {
+  color: #808087;
+  font-size: 1em;
 }

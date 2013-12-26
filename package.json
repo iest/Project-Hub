@@ -14,5 +14,10 @@
     "ejs": "~0.8.5",
     "nedb": "~0.9.3",
     "moment": "~2.4.0"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-stylus": "~0.7.0",
+    "grunt-contrib-watch": "~0.5.2"
   }
 }

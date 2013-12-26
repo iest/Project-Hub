@@ -82,7 +82,7 @@ App.ApplicationController = Ember.Controller.extend({
   }.property(),
   isAdmin: function() {
     var isAdmin = docCookies.getItem('phub_admin');
-    return isAdmin === 'true' ? true: false;
+    return isAdmin === 'true' ? true : false;
   }.property(),
   error: '',
   actions: {
@@ -251,10 +251,20 @@ App.NodeEditView = Ember.View.extend({
     // Focus on the text area
     this.$('textarea')
       .focus();
+
+    // var $el = this.$(),
+    //   h = $el.outerHeight(true);
+
+    // $el.css('height', 0)
+    //   .animate({
+    //     height: h
+    //   });
   }
 });
 
 App.XPikadayComponent = Ember.Component.extend({
+  _picker: null,
+
   formatted: null,
   epoch: null,
 
@@ -280,6 +290,11 @@ App.XPikadayComponent = Ember.Component.extend({
       field: _this.$('input')[0],
       format: 'MMM Do YYYY'
     });
+    this.set('_picker', picker);
+  },
+
+  willDestroyElement: function() {
+    this.get('_picker').destroy();
   },
 
   actions: {
