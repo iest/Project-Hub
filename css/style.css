@@ -67,7 +67,6 @@ input[type='password'],
 textarea {
   font: 100%/1.4 "HelveticaNeue", "Helvetica", "Arial", sans-serif;
   font-weight: lighter;
-  width: 100%;
   color: #555;
   border: 1px solid #ddd;
   padding: 0.25em;}
@@ -298,6 +297,10 @@ h3 {
 
 .size70 {
   width: 70%;
+}
+
+.size100 {
+  width: 100%;
 }
 
 .pull-left {

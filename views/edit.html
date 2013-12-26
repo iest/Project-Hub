@@ -48,7 +48,7 @@
         <button class="btn btn--today" {{action 'setToday' this}}>
             Today
         </button>
-        {{input value=formatted placeholder=placeholder}}
+        {{input value=formatted class='size100' placeholder=placeholder}}
     </script>
 
     <script type="text/x-handlebars" data-template-name='timeline'>
@@ -72,7 +72,7 @@
                                 </fieldset>
                                 <fieldset>
                                     <label>What happened?</label>
-                                    {{textarea value=content placeholder="e.g. Project kickoff meeting"}}
+                                    {{textarea class='size100' value=content placeholder="e.g. Project kickoff meeting"}}
                                 </fieldset>
                                 <fieldset>
                                     <label class="clear">Optional link</label>
