@@ -3,6 +3,8 @@ var app = express();
 var moment = require('moment');
 var util = require('./helper');
 
+var port = process.argv[2] || 3000;
+
 var Datastore = require('nedb'),
   db = new Datastore({
     filename: 'datastore.db',
@@ -148,5 +150,5 @@ app.use(function(req, res) {
     .send('Not found');
 });
 
-app.listen(3000);
-console.log('Server running on 3000');
+app.listen(port);
+console.log('Server running on port ' + port);

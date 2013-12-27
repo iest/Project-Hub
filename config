@@ -1,9 +1,10 @@
 ### CONFIG FILE
-# Type whatever you want after the equals signs.
+# Type whatever you want after the equals signs. Space are spaces, so:
 # foo=bar -> {foo:'bar'}
-# foo = bar -> {'foo ': ' bar'} (spaces are spaces)
+# foo = bar -> {'foo ': ' bar'}
 
 ## PROJECT NAME
+
 project_name=Project Hub Timeline
 
 ## PERMISSIONS
@@ -11,13 +12,12 @@ project_name=Project Hub Timeline
 # - login: Anyone can view, admins have to login to edit
 # - private: separate logins for read-only users and admin users
 # - public: No login at all, all viewers have admin access
-permissions=private
+
+permissions=login
 
 ## PASSWORDS
-# Only used if permissions is set to private
+# Only used if permissions is set to login/private
 
-# Admins can add/edit/delete events.
 admin_password=write
 
-# Read-only users can only view the timeline.
 readonly_password=read
