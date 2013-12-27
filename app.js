@@ -150,7 +150,7 @@ App.TimelineController = Ember.Controller.extend({
 
   nodes: [],
 
-  isNewNode: false,
+  isEditingNode: false,
 
   actions: {
     newNode: function() {
@@ -160,10 +160,11 @@ App.TimelineController = Ember.Controller.extend({
       });
       this.get('nodes')
         .insertAt(0, node);
-      this.set('isNewNode', true);
+      this.set('isEditingNode', true);
     },
     editNode: function(node) {
       node.set('isEditing', true);
+      this.set('isEditingNode', true);
     },
     saveNode: function(node) {
 
@@ -208,7 +209,7 @@ App.TimelineController = Ember.Controller.extend({
       }
 
       node.set('isEditing', false);
-      this.set('isNewNode', false);
+      this.set('isEditingNode', false);
 
     },
 
@@ -217,7 +218,7 @@ App.TimelineController = Ember.Controller.extend({
       var _this = this;
 
       if (confirm('Are you sure you want to delete this node?')) {
-        this.set('isNewNode', false);
+        this.set('isEditingNode', false);
         this.get('nodes')
           .removeObject(node);
 
@@ -238,12 +239,11 @@ App.TimelineController = Ember.Controller.extend({
 
     cancelNode: function(node) {
 
-      if (this.get('isNewNode')) {
-        this.set('isNewNode', false);
-        this.get('nodes')
-          .removeObject(node);
+      if (!node.get('_id')) {
+        this.get('nodes').removeObject(node);
       }
 
+      this.set('isEditingNode', false);
       node.set('isEditing', false);
     }
   }
