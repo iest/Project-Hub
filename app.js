@@ -5,6 +5,9 @@ App.Node = Ember.Object.extend({
   epoch: '',
   content: '',
   linkUrl: '',
+  // linkUrlSetter: function() {
+  //   this.set('linkUrl', this.get('properLink'));
+  // }.observes('properLink').on('init'),
   properLink: function() {
     var link = this.get('linkUrl');
     return (/^(http|https):\/\//).test(link) ? link : 'http://' + link;
@@ -188,7 +191,7 @@ App.TimelineController = Ember.Controller.extend({
         $.ajax({
           url: '/api/events',
           type: 'PUT',
-          data: node.getProperties('epoch', 'content', 'properLink', 'linkText', '_id')
+          data: node.getProperties('epoch', 'content', 'linkUrl', 'linkText', '_id')
         })
           .fail(function(fail) {
             _this.send('handleFail', 'Failed to save the event. Please try again.');
@@ -196,7 +199,7 @@ App.TimelineController = Ember.Controller.extend({
       } else {
 
         // Otherwise it's a new event, so post it.
-        $.post('/api/events', node.getProperties('epoch', 'content', 'properLink', 'linkText'))
+        $.post('/api/events', node.getProperties('epoch', 'content', 'linkUrl', 'linkText'))
           .then(function(res) {
             node.setProperties(res);
 
