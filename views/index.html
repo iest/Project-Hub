@@ -16,7 +16,18 @@
                 <li class="tl-node">
                     <div class="tl-stamp"><%= moment(parseFloat(nodes[i].epoch)).format('MMM Do YYYY') %></div>
                     <div class="tl-content"><%= nodes[i].content %></div>
-                    <a href=<%= nodes[i].linkUrl %>><%= nodes[i].linkText %></a>
+
+                    <%if (nodes[i].properLink) {%>
+                        <a href=<%= nodes[i].properLink %>>
+                            <%= nodes[i].linkText %>
+                        </a>
+                    <%}%>
+
+                    <%if (nodes[i].linkUrl) {%>
+                        <a href=<%= nodes[i].linkUrl %>>
+                            <%= nodes[i].linkText %>
+                        </a>
+                    <%}%>
                 </li>
             <% } %>
         </ol>
