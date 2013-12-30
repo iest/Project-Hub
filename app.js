@@ -13,6 +13,13 @@ App.Node = Ember.Object.extend({
 App.Router.map(function() {
   this.resource('login');
   this.resource('timeline');
+  this.route('fourOhFour', {path: '*path'});
+});
+
+App.FourOhFourRoute = Ember.Route.extend({
+  redirect: function() {
+    this.transitionTo('timeline');
+  }
 });
 
 App.ApplicationRoute = Ember.Route.extend({
