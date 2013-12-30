@@ -151,6 +151,7 @@ App.TimelineController = Ember.Controller.extend({
   nodes: [],
 
   isEditingNode: false,
+  isNewNode: false,
 
   actions: {
     newNode: function() {
@@ -161,6 +162,7 @@ App.TimelineController = Ember.Controller.extend({
       this.get('nodes')
         .insertAt(0, node);
       this.set('isEditingNode', true);
+      this.set('isNewNode', true);
     },
     editNode: function(node) {
       node.set('isEditing', true);
@@ -210,6 +212,10 @@ App.TimelineController = Ember.Controller.extend({
 
       node.set('isEditing', false);
       this.set('isEditingNode', false);
+
+      if (this.get('isNewNode')) {
+        this.set('isNewNode', false);
+      }
 
     },
 

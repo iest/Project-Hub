@@ -82,7 +82,7 @@
                             <div>
                                 <button class="btn btn--success" {{bindAttr disabled='isInvalid'}} {{action 'saveNode' this}}>Save</button>
                                 <button class="btn" {{action 'cancelNode' this}}>Cancel</button>
-                                {{#unless controller.isEditingNode}}
+                                {{#unless controller.isNewNode}}
                                     <button class="btn btn--danger pull-right" {{action 'deleteNode' this}}>Delete</button>
                                 {{/unless}}
                             </div>
