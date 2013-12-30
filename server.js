@@ -33,6 +33,16 @@ if (permission_type === 'login') {
   // Index
   app.get('/', function(req, res) {
     db.find({}, function(err, docs) {
+
+      docs.sort(function(a, b) {
+          if (a.epoch < b.epoch) {
+            return 1;
+          } else if (a.epoch > b.epoch) {
+            return -1;
+          }
+          return 0;
+        });
+
       if (err) throw err;
       res.render('index.html', {
         project_name: util.getConfig().project_name,
